@@ -17,10 +17,8 @@ namespace FakeBank.Controllers
     {
         private ModelFactory _modelFactory;
         private ApplicationUserManager _appUserManager;
-        protected ApplicationUserManager AppUserManager
-        {
-            get { return _appUserManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-        }
+        protected ApplicationUserManager AppUserManager => _appUserManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
         protected ModelFactory TheModelFactory
         {
             get
@@ -39,23 +37,20 @@ namespace FakeBank.Controllers
                 return InternalServerError();
             }
 
-            if (!result.Succeeded)
+            if (result.Succeeded) return null;
+            if (result.Errors != null)
             {
-                if (result.Errors != null)
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
+                    ModelState.AddModelError("", error);
                 }
-
-                if (ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                return BadRequest(ModelState);
             }
-            return null;
+
+            if (ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            return BadRequest(ModelState);
         }
     }
 }

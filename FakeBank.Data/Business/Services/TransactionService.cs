@@ -67,7 +67,10 @@ namespace FakeBank.Data.Business.Services
                 using (var db = new FAKE_BANKEntities())
                 {
                     var transactionRepository = new TransactionRepository(db);
-                    return transactionRepository.Search(a => a.IdSourceAccount == Id).ToList();
+                    return transactionRepository.Search(
+                        a => a.IdSourceAccount == Id,
+                        a => a.OrderByDescending(transaction => transaction.Date),
+                        a => a.Account.Card).ToList();
                 }
             }
             catch (Exception ex)

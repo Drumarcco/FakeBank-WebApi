@@ -36,7 +36,7 @@ namespace FakeBank.Data.Business.Services
                 {
                     var accountRepository = new AccountRepository(db);
                     accountRepository.Delete(account);
-                    return db.SaveChanges()>=1;
+                    return db.SaveChanges() >= 1;
                 }
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace FakeBank.Data.Business.Services
                 }
             }
             catch (Exception ex)
-            {       
+            {
                 throw ex;
             }
         }
@@ -100,7 +100,7 @@ namespace FakeBank.Data.Business.Services
                 using (var db = new FAKE_BANKEntities())
                 {
                     var accountRepository = new AccountRepository(db);
-                    return accountRepository.Search(a => a.IdCustomer == id);
+                    return accountRepository.Search(a => a.IdCustomer == id, null, account => account.Card);
                 }
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace FakeBank.Data.Business.Services
             }
         }
 
-        public bool UpdateBalance(Account accountSource,Account accountDestination, double amount)
+        public bool UpdateBalance(Account accountSource, Account accountDestination, double amount)
         {
             try
             {
@@ -145,6 +145,25 @@ namespace FakeBank.Data.Business.Services
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public double GetBalanceByCardNumber(string cardNumber)
+        {
+
+            using (var db = new FAKE_BANKEntities())
+            {
+                return db.Accounts.Where(a => a.Card.CardNumber == cardNumber)
+                    .Select(a => a.Balance).FirstOrDefault();
+            }
+
+        }
+
+        public Account GetByAccountId(string accountId)
+        {
+            using (var db = new FAKE_BANKEntities())
+            {
+                return db.Accounts.FirstOrDefault(a => a.Id.ToString() == accountId);
             }
         }
     }

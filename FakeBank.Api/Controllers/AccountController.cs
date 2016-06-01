@@ -174,11 +174,12 @@ namespace FakeBank.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "employee, moralperson, physicalperson")]
-        public IHttpActionResult GetBalanceByCardNumber()
+        [Route("Balance/{accountId}")]
+        public IHttpActionResult GetBalanceByCardNumber(string accountId)
         {
             var accountService = new AccountService();
             var userId = User.Identity.GetUserId();
-            var account = accountService.GetByUserId(userId);
+            var account = accountService.GetByAccountId(accountId);
             return (account != null) ? (IHttpActionResult) Ok(TheModelFactory.Create(account)) : NotFound();
         }
 

@@ -91,8 +91,17 @@ namespace FakeBank.Api.Controllers
         public IHttpActionResult GetTransactionByUserId(string id)
         {
             var transactionService = new TransactionService();
-            var transactions = transactionService.GetByAccountId(id);
-            return (transactions != null) ? (IHttpActionResult) Ok(TheModelFactory.Create(transactions)) : NotFound();
+            var transactions = transactionService.GetByAccountId(id).Select(t => new
+            {
+                t.Id,
+                t.TransactionNumber,
+                t.Date,
+                t.IdSourceAccount,
+                t.IdDestinationAccount,
+                t.Amount,
+                DestinationCard = t.Account.Card.CardNumber
+            });
+            return Ok(transactions);
         }
     }
 }

@@ -40,9 +40,9 @@ namespace FakeBank.Data.Business
         /// Gets the whole list of entities of a set.
         /// </summary>
         /// <returns>List of entities of a set.</returns>
-        public virtual List<TEntity> GetAll()
+        public virtual Task<List<TEntity>> GetAll()
         {
-            return Context.Set<TEntity>().ToList();
+            return Context.Set<TEntity>().ToListAsync();
         }
 
         /// <summary>

@@ -37,7 +37,8 @@ namespace FakeBank.Api.Models
                 Id = a.Id,
                 BeginDate = a.BeginDate,
                 Balance = a.Balance,
-                Active = a.Active
+                Active = a.Active,
+                CardNumber = a.Card.CardNumber
             }).ToList();
         }
 
@@ -171,6 +172,7 @@ namespace FakeBank.Api.Models
         public class AccountModel
         {
             public Guid Id { get; set; }
+            public string CardNumber { get; set; }
             public DateTime BeginDate { get; set; }
             public double Balance { get; set; }
             public bool Active { get; set; }
